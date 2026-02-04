@@ -56,7 +56,7 @@ function main {
 			echo "ERROR: Required variable empty: ANSIBLE_LIST_TAGS_REFERENCE_PLAYBOOK"
 			exit 1
 		fi
-		
+
 		# Extract the TASK TAGS line
 		local output_list_tags=$(ansible-playbook --list-tags "${ANSIBLE_LIST_TAGS_REFERENCE_PLAYBOOK}")
 		# Removing the prefix and brackets
@@ -85,10 +85,18 @@ function main {
 	fi
 
 	# Create a new JSON entry
-	local new_entry=$(jq -n --arg id "${new_updateID}" --argjson tags "${tags_array}" '{"updateID": ${id} | tonumber, "tags": ${tags}}')
+	local new_entry=$(jq -n --arg id "${new_updateID}" --argjson tags "${tags_array}" '{"updateID": $id | tonumber, "tags": $tags}')
+	if [[ -z ${new_entry} ]]; then
+		echo "ERROR: new_entry is empty. Probably a jq compile error! Exit."
+		exit 1
+	fi
 
 	# Append the new entry to the existing JSON
 	local updated_content=$(echo "${current_content}" | jq ". += [${new_entry}]")
+	if [[ -z ${updated_content} ]]; then
+		echo "ERROR: updated_content is empty. Probably a jq compile error! Exit."
+		exit 1
+	fi
 
 	# Write the updated JSON back to the file
 	echo "${updated_content}" > "${ANSIBLE_PULL_CONFIG_PATH}"
