@@ -85,7 +85,7 @@ function set_tags {
 	echo -e "${CYAN}Enter tags${CLEAR}"
 	echo -e "${GREY}Separator: comma${CLEAR}"
 	echo -e "${GREY}Partial match is supported${CLEAR}"
-	echo -e "${GREY}Leave empty to list available hosts${CLEAR}"
+	echo -e "${GREY}Leave empty to list available tags${CLEAR}"
 	read -p ">> " tags_query
 
 	# user inputs nothing
