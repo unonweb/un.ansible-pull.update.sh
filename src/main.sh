@@ -185,9 +185,7 @@ function main {
 	
 	# Tags
 	set_tags
-	echo "ANSIBLE_TAGS: ${ANSIBLE_TAGS}"
-	echo "ANSIBLE_TAGS_ARRAY: ${ANSIBLE_TAGS_ARRAY[@]}"
-
+	
 	# Convert the input into a JSON array format
 	tags_array=$(echo "${ANSIBLE_TAGS}" | tr ',' '\n' | jq -R . | jq -s .)
 
